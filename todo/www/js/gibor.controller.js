@@ -4,6 +4,7 @@
     var vm = this;
   
     vm.projects = Projects.all();
+    
     vm.newProject = function () {
       var projectTitle = prompt('שם העולם');
       if (projectTitle) {
@@ -40,9 +41,36 @@
       ionicDatePicker.openDatePicker(datePicker);
     };
        
+    vm.activeProject = vm.projects[Projects.getLastActiveIndex()];
+
+    vm.deleteProject = function (projectTitle) {
+      for (var i=0; i< vm.projects.length ; i++) {
+        if ( vm.projects[i].title == projectTitle)
+            vm.projects.splice(i,i+1);
+      }
+      Projects.save(vm.projects);
+    }
+
+    // Called to select the given project
+    vm.selectProject = function (project, index) {
+      vm.activeProject = project;
+      Projects.setLastActiveIndex(index);
+      $ionicSideMenuDelegate.toggleRight(false);
+    };
+
+    vm.newTask = function () {
+      vm.taskModal.show();
+    };
+
+    vm.closeNewTask = function () {
+      vm.taskModal.hide();
+    }
+
+    vm.toggleProjects = function () {
+      $ionicSideMenuDelegate.toggleRight();
+    };
 
     // Private functions
-
     var createProject = function (projectTitle) {
       var newProject = Projects.newProject(projectTitle);
       vm.projects.push(newProject);
@@ -59,51 +87,12 @@
       mondayFirst: false,
     };
 
-
-
-
-    // Load or initialize projects
-    // Grab the last active, or the first project
-    vm.activeProject = vm.projects[Projects.getLastActiveIndex()];
-
-    
-
-    vm.deleteProject = function (projectTitle) {
-      for (var project in vm.projects) {
-        if (project.title == projectTitle)
-          delete project;
-      }
-      Projects.save(vm.projects);
-    }
-
-    // Called to select the given project
-    vm.selectProject = function (project, index) {
-      vm.activeProject = project;
-      Projects.setLastActiveIndex(index);
-      $ionicSideMenuDelegate.toggleRight(false);
-    };
-
     // Create our modal
     $ionicModal.fromTemplateUrl('new-task.html', function (modal) {
       vm.taskModal = modal;
     }, {
         scope: $scope
       });
-
-    
-
-    vm.newTask = function () {
-      vm.taskModal.show();
-    };
-
-    vm.closeNewTask = function () {
-      vm.taskModal.hide();
-    }
-
-    vm.toggleProjects = function () {
-      $ionicSideMenuDelegate.toggleRight();
-    };
-
 
     // Try to create the first project, make sure to defer
     // this by using $timeout so everything is initialized
@@ -119,5 +108,4 @@
         }
       }
     }, 1000);
-
   }

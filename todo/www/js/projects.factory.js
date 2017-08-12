@@ -6,7 +6,7 @@
     function Projects() {
         return {
             all: function () {
-                var projectString = window.localStorage['projects'];
+                var projectString = window.localStorage['projects1'];
 
                 if (projectString) {
                     return angular.fromJson(projectString);
@@ -15,7 +15,7 @@
                 return [];
             },
             save: function (projects) {
-                window.localStorage['projects'] = angular.toJson(projects);
+                window.localStorage['projects1'] = angular.toJson(projects);
             },
             newProject: function (projectTitle) {
                 // Add a new project
@@ -25,7 +25,7 @@
                 };
             },
             init: function () {
-                window.localStorage['projects'] = [];
+                window.localStorage['projects1'] = [];
                 window.localStorage['lastActiveProject'] = null;
             },
             getLastActiveIndex: function () {
