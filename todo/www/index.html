@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title>גִיבוׂר</title>
+
+  <link rel="manifest" href="manifest.json">
+
+  <!-- un-comment this code to enable service worker
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(() => console.log('service worker installed'))
+          .catch(err => console.log('Error', err));
+      }
+    </script>-->
+
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+  <!-- ionic/angularjs js -->
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
+  <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
+
+
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
+
+  <!-- your app's js -->
+  <script src="js/app.js"></script>
+  <script src="js/gibor.controller.js"></script>
+  <script src="js/projects.factory.js"></script>
+</head>
+
+<body ng-app="gibor" ng-controller="GiborCtrl as gibor">
+  <ion-side-menus>
+    <!-- Left menu -->
+    <ion-side-menu side="right">
+      <ion-header-bar class="bar bar-header bar-calm">
+        <button class="button button-icon ion-plus" ng-click="gibor.newProject()"></button>
+        <h1 class="title title-right">עולמות</h1>
+      </ion-header-bar>
+      <ion-content scroll="false">
+        <ion-list>
+          <ion-item ng-repeat="project in gibor.projects" ng-click="selectProject(project, $index)" ng-class="{active: activeProject == project}">
+            <span style="float:right;">{{project.title}}</span>
+            <button style="float: left;" class="button button-icon ion-android-delete" ng-click="deleteProject(project)"></button>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-side-menu>
+
+    <!-- Center content -->
+    <ion-side-menu-content>
+      <ion-header-bar class="bar bar-header bar-royal">
+        <!-- New Task button-->
+        <button class="button button-icon" ng-click="newTask()">
+      <i class="icon ion-compose"></i>
+    </button>
+        <h1 class="title title-right">{{activeProject.title}} - גִיבוׂר</h1>
+        <button class="button button-icon" ng-click="toggleProjects()">
+      <i class="icon ion-navicon"></i>
+    </button>
+      </ion-header-bar>
+      <ion-content scroll="false">
+        <ion-list style="direction:rtl;">
+          <ion-item ng-repeat="task in activeProject.tasks">
+            {{task.title}}
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-side-menu-content>
+
+
+    <script id="new-task.html" type="text/ng-template">
+
+      <div style="direction:rtl" class="modal">
+
+        <!-- Modal header bar -->
+        <ion-header-bar class="bar bar-header bar-balanced">
+          <h1 class="title title-right">קבלה חדשה</h1>
+          <button class="button button-positive" ng-click="closeNewTask()">יציאה</button>
+        </ion-header-bar>
+
+        <!-- Modal content area -->
+        <ion-content>
+          <form ng-submit="gibor.createTask(task)">
+            <div class="list">
+              <label class="item item-input">
+              <input type="text" placeholder="כותרת הקבלה" ng-model="task.title">
+              </label>
+              <label class="item item-input">
+              <input type="text" placeholder="תיאור מפורט" ng-model="task.details">
+              </label>
+              <label class="item item-input">
+              <input type="text" placeholder="תוקף הקבלה">
+              <input type="text" ng-click="gibor.openDatePicker()" placeholder="{{taskDate}}" >
+              </label>
+              <div class="item item-input">
+                <input type="text" placeholder="שותף">
+                <select ng-model="task.partner">
+                    <option>אשר ינון בן יעל</option>
+                    <option>יצחק סיבוני</option>
+                    <option>אברהם מועלם</option>
+                  </select>
+              </div>
+              <div class="item item-input">
+                <input type="text" placeholder="סוג הקבלה" >
+                <select ng-model="task.missionType">
+                    <option>לימוד</option>
+                    <option>פעולה</option>
+                    <option>תפילה</option>
+                  </select>
+              </div>
+              <!--toggle-->
+            </div>
+            <div class="padding">
+              <button type="submit" class="button button-block button-positive">צור קבלה</button>
+            </div>
+          </form>
+
+        </ion-content>
+
+      </div>
+
+    </script>
+  </ion-side-menus>
+</body>
+
+</html>
