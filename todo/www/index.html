@@ -48,9 +48,9 @@
       </ion-header-bar>
       <ion-content scroll="false">
         <ion-list>
-          <ion-item ng-repeat="project in gibor.projects" ng-click="selectProject(project, $index)" ng-class="{active: activeProject == project}">
+          <ion-item ng-repeat="project in gibor.projects" ng-click="gibor.selectProject(project, $index)" ng-class="{active: gibor.activeProject == project}">
             <span style="float:right;">{{project.title}}</span>
-            <button style="float: left;" class="button button-icon ion-android-delete" ng-click="deleteProject(project)"></button>
+            <button style="float: left;" class="button button-icon ion-android-delete" ng-click="gibor.deleteProject(project)"></button>
           </ion-item>
         </ion-list>
       </ion-content>
@@ -60,17 +60,17 @@
     <ion-side-menu-content>
       <ion-header-bar class="bar bar-header bar-royal">
         <!-- New Task button-->
-        <button class="button button-icon" ng-click="newTask()">
+        <button class="button button-icon" ng-click="gibor.newTask()">
       <i class="icon ion-compose"></i>
     </button>
-        <h1 class="title title-right">{{activeProject.title}} - גִיבוׂר</h1>
-        <button class="button button-icon" ng-click="toggleProjects()">
+        <h1 class="title title-right">{{gibor.activeProject.title}} - גִיבוׂר</h1>
+        <button class="button button-icon" ng-click="gibor.toggleProjects()">
       <i class="icon ion-navicon"></i>
     </button>
       </ion-header-bar>
       <ion-content scroll="false">
         <ion-list style="direction:rtl;">
-          <ion-item ng-repeat="task in activeProject.tasks">
+          <ion-item ng-repeat="task in gibor.activeProject.tasks">
             {{task.title}}
           </ion-item>
         </ion-list>
@@ -85,7 +85,7 @@
         <!-- Modal header bar -->
         <ion-header-bar class="bar bar-header bar-balanced">
           <h1 class="title title-right">קבלה חדשה</h1>
-          <button class="button button-positive" ng-click="closeNewTask()">יציאה</button>
+          <button class="button button-positive" ng-click="gibor.closeNewTask()">יציאה</button>
         </ion-header-bar>
 
         <!-- Modal content area -->
@@ -100,7 +100,7 @@
               </label>
               <label class="item item-input">
               <input type="text" placeholder="תוקף הקבלה">
-              <input type="text" ng-click="gibor.openDatePicker()" placeholder="{{taskDate}}" >
+              <input type="text" ng-click="gibor.openDatePicker()" placeholder="{{gibor.taskDate}}" >
               </label>
               <div class="item item-input">
                 <input type="text" placeholder="שותף">
