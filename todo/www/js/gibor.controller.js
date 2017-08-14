@@ -1,6 +1,6 @@
   angular.module('gibor').controller('GiborCtrl', GiborController);
 
-  function GiborController($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate, ionicDatePicker) {
+  function GiborController($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate) {
     var vm = this;
   
     vm.projects = Projects.all();
@@ -16,13 +16,14 @@
       if (!vm.activeProject || !task) {
         return;
       }
+
       vm.activeProject.tasks.push({
         title: task.title,
         details: task.details,
-        validity: vm.taskDate ? vm.taskDate : null,
         partner: task.partner,
-        missionType: task.missionType,
-        reminder: task.reminder
+        type: task.type,
+        reminder: task.reminder,
+        frequency: task.frequency
       });
       vm.taskModal.hide();
 
@@ -31,16 +32,12 @@
 
       task.title = "";
       task.details = "";
-      task.validity = "";
       task.partner = "";
-      task.missionType = "";
+      task.type = "";
       task.reminder = "";
+      task.frequency = "";
     }; 
 
-    vm.openDatePicker = function () {
-      ionicDatePicker.openDatePicker(datePicker);
-    };
-       
     vm.activeProject = vm.projects[Projects.getLastActiveIndex()];
 
     vm.deleteProject = function (projectTitle) {
@@ -71,21 +68,31 @@
     };
 
     // Private functions
+    vm.missionPartnersList = [
+      {id:5, name:  "לבד"},
+      {id:1 ,name: "אשר בן יעל"},
+      {id:2, name:  "יצחק בן דינה"},
+      {id:3, name:  "אברהם בן רינה"},
+      {id:4, name:  "אברהם בן רונית"}];
+
+    vm.missionTypes = [
+        {id: 1 , type:"לימוד"},
+        {id: 2 , type:"פעולה"},
+        {id: 3 , type:"תפילה"},];
+
+    vm.missionFrequencies = [
+        {id: 1 , name:"יומיומי"},
+        {id: 2 , name:"שבועי"},
+        {id: 3 , name:"דו שבועי"},
+        {id: 4 , name:"כל שישי"},
+        {id: 5 , name:"תמיד"},];
+
     var createProject = function (projectTitle) {
       var newProject = Projects.newProject(projectTitle);
       vm.projects.push(newProject);
       Projects.save(vm.projects);
       vm.selectProject(newProject, vm.projects.length - 1);
     }
-
-    var datePicker = {
-      callback: function (val) {  //Mandatory
-        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-        var date = new Date(val);
-        vm.taskDate = date.getMonth() + "/" + date.getFullYear()
-      },
-      mondayFirst: false,
-    };
 
     // Create our modal
     $ionicModal.fromTemplateUrl('new-task.html', function (modal) {

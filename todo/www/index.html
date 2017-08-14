@@ -26,7 +26,6 @@
 
   <!-- ionic/angularjs js -->
   <script src="lib/ionic/js/ionic.bundle.js"></script>
-  <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
 
 
   <!-- cordova script (this will be a 404 during development) -->
@@ -71,12 +70,14 @@
       <ion-content scroll="false">
         <ion-list style="direction:rtl;">
           <ion-item ng-repeat="task in gibor.activeProject.tasks">
-            {{task.title}}
+            <span style="border: 1px solid #774343;padding: 6px;font-size: 11px;">{{task.type.name}}</span>
+            <span style="border: 1px solid #774343;padding: 6px;font-size: 11px;">{{task.frequency.type}}</span>
+            <span style="padding-right: 10px;">{{task.title}}</span>
+            <span style="padding-right: 10px;font-size: 11px;">{{task.partner.name}}</span>
           </ion-item>
         </ion-list>
       </ion-content>
     </ion-side-menu-content>
-
 
     <script id="new-task.html" type="text/ng-template">
 
@@ -93,30 +94,24 @@
           <form ng-submit="gibor.createTask(task)">
             <div class="list">
               <label class="item item-input">
-              <input type="text" placeholder="כותרת הקבלה" ng-model="task.title">
+              <input type="text" placeholder="כותרת הקבלה" ng-model="task.title" required>
               </label>
               <label class="item item-input">
-              <input type="text" placeholder="תיאור מפורט" ng-model="task.details">
-              </label>
-              <label class="item item-input">
-              <input type="text" placeholder="תוקף הקבלה">
-              <input type="text" ng-click="gibor.openDatePicker()" placeholder="{{gibor.taskDate}}" >
+              <textarea style="height: 63px;padding-right: 22px;" type="text" placeholder="תיאור מפורט" ng-model="task.details"></textarea>
               </label>
               <div class="item item-input">
-                <input type="text" placeholder="שותף">
-                <select ng-model="task.partner">
-                    <option>אשר ינון בן יעל</option>
-                    <option>יצחק סיבוני</option>
-                    <option>אברהם מועלם</option>
-                  </select>
+                <span class="mission-item-label">תדירות הקבלה</span>
+                <select ng-model="task.type" ng-options="missionFrequency.name for missionFrequency in gibor.missionFrequencies"/>
               </div>
               <div class="item item-input">
-                <input type="text" placeholder="סוג הקבלה" >
-                <select ng-model="task.missionType">
-                    <option>לימוד</option>
-                    <option>פעולה</option>
-                    <option>תפילה</option>
-                  </select>
+                <span class="mission-item-label">שותף</span>
+                  <select
+                    ng-model="task.partner" ng-options="missionPartner.name for missionPartner in gibor.missionPartnersList"/> 
+              </div>
+              <div class="item item-input">
+                <span class="mission-item-label">סוג קבלה</span>
+                <select ng-model="task.frequency" ng-options="missionType.type for missionType in gibor.missionTypes"/>
+                
               </div>
               <!--toggle-->
             </div>
